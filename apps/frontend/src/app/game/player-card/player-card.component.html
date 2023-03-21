@@ -1,0 +1,12 @@
+<mat-card (click)="cardClicked()" class="player-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon *ngIf="player.isGameMaster">star_border</mat-icon>
+      {{player.name}}
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="showPlayerRole">{{player.role}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <img [src]="playerRoleImage">
+  </mat-card-content>
+</mat-card>

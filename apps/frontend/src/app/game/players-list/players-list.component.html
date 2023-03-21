@@ -1,0 +1,5 @@
+<div class="player-cards-container">
+    <websocket-poc-player-card *ngFor="let player of players" class="player-card"
+      [player]="player" (clicked)="playerClicked($event)"></websocket-poc-player-card>
+
+</div>

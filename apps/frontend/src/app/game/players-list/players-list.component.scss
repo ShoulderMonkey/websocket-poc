@@ -1,0 +1,13 @@
+.player-cards-container{
+  display:flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.player-card{
+  display:flex;
+  max-width: 30%;
+  min-width: 20%;
+}

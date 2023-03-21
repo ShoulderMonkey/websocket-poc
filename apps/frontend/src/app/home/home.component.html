@@ -1,0 +1,48 @@
+<form [formGroup]="form" class="fill-parent">
+  <mat-stepper linear #stepper class="flex-fill">
+    <mat-step>
+      <mat-card class="main-card fill-parent">
+        <mat-card-header>
+          <mat-card-title>Enter your name</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="flex-fill">
+          <mat-form-field class="example-form-field">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name">
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-raised-button matStepperNext (click)="createPlayer()">Player</button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-step>
+    <mat-step >
+      <mat-card class="main-card fill-parent">
+        <mat-card-header>
+          <mat-card-title>Join Game</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="flex-fill">
+          <mat-form-field class="example-form-field">
+            <mat-label>Game Code</mat-label>
+            <input matInput type="text" formControlName="roomId">
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions class="space-between">
+          <button mat-raised-button matStepperNext (click)="createGame()">CreateGame</button>
+          <button mat-raised-button matStepperNext (click)="joinGame()">JoinGame</button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-step>
+
+    <!-- <mat-form-field class="example-form-field">
+      <mat-label>GameId</mat-label>
+      <input matInput type="text" formControlName="roomId">
+    </mat-form-field>
+
+    <button mat-button (click)="createGame()">Game</button>
+    <button mat-button (click)="joinGame()">Join</button> -->
+
+  </mat-stepper>
+</form>
+
+
