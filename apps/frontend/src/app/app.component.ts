@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameService } from './services/game.service';
 
 import { PlayerService } from './services/player.service';
 
@@ -10,7 +11,9 @@ import { PlayerService } from './services/player.service';
 export class AppComponent implements OnInit {
   title = 'frontend';
 
-  constructor(){}
+  constructor(
+    public gameService: GameService
+  ){}
 
   ngOnInit(){
 

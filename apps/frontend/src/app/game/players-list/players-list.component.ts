@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Player } from '../../api-interfaces/player';
 
 @Component({
@@ -8,8 +8,9 @@ import { Player } from '../../api-interfaces/player';
 })
 export class PlayersListComponent {
   @Input()players!: Player[]
+  @Output() playerClickedEvent: EventEmitter<Player> = new EventEmitter()
 
   playerClicked(player: Player){
-    console.log(player);
+    this.playerClickedEvent.emit(player)
   }
 }

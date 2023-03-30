@@ -1,13 +1,18 @@
 .player-cards-container{
-  display:flex;
-  flex-direction: row;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 10px;
+}
+
+@media (max-width: 600px){
+  .player-cards-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
 }
 
 .player-card{
   display:flex;
-  max-width: 30%;
-  min-width: 20%;
+  aspect-ratio: 3/5;
 }

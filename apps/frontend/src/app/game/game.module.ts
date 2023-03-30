@@ -9,11 +9,13 @@ import { PlayerCardComponent } from './player-card/player-card.component';
 import {MatCardModule} from '@angular/material/card';
 import { PlayersListComponent } from './players-list/players-list.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 
 const MATERIAL_MODULES = [
   MatCardModule,
-  MatIconModule
+  MatIconModule,
+  MatButtonModule
 ]
 
 @NgModule({

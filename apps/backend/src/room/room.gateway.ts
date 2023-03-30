@@ -9,7 +9,7 @@ import {
   } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 
-import { Player, Room } from './room';
+import { GamePhase, Player, Room } from './room';
 import { RoomService } from './room.service';
 
 
@@ -31,7 +31,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('a player si leaving');
 
     let room = this.roomService.rooms.find(room => room.players.some(player => player.socketId === socket.id))
-    console.log('room:', room);
+    //console.log('room:', room);
 
     if(room){
       await this.server.in(socket.id).socketsLeave(room.id)
@@ -61,9 +61,70 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     room.addPlayer(payload.player,isGameMaster)
     this.server.to(payload.roomId).emit('game', room)
   }
+
+  @SubscribeMessage('next_game_phase')
+  async onNextGamePhase(@MessageBody()payload: NextGamePhasePayload){
+    let room = this.roomService.getRoom(payload.roomId)
+    room.nextPhase()
+    this.server.to(payload.roomId).emit('game', room)
+    if(room.gamePhase.isNight){
+      this.handleNightPhase(room.gamePhase, room.id)
+    }
+  }
+
+  @SubscribeMessage('vote_day')
+  async onVoteDay(@MessageBody()payload: VoteDayPayload){
+    let room = this.roomService.getRoom(payload.roomId)
+    room.gamePhase.setVote(payload.player.id, payload.voteFor)
+    this.server.to(payload.roomId).emit('game', room)
+  }
+
+  @SubscribeMessage('execute_night_action')
+  async onExecuteNightAction(@MessageBody()payload: NightActionPayload){
+    let room = this.roomService.getRoom(payload.roomId)
+    let isNight
+    //register night action
+    room.gamePhase.setVote(payload.player.id, payload.targetPlayerId)
+    if(room.gamePhase.turnName === 'wolf'){
+      let wolvesCount = room.gamePhase.players.filter(player => player.role.name === 'wolf').length
+      let wolvesVotedCount = room.gamePhase.players.filter(player => player.votedFor !== null).length
+      if(wolvesCount === wolvesVotedCount){
+        //wolves did vote
+        isNight = room.gamePhase.nextTrunName()
+
+        isNight ? this.handleNightPhase(room.gamePhase, room.id): this.nightIsOver(room)
+      }else{
+        //wolves missing vote
+      }
+    }else{
+      isNight = room.gamePhase.nextTrunName()
+      isNight ? this.handleNightPhase(room.gamePhase, room.id): this.nightIsOver(room)
+    }
+  }
+
+  private handleNightPhase(phase: GamePhase, roomId: string){
+    this.server.to(roomId).emit(phase.turnName, true)
+  }
+
+  private nightIsOver(room: Room){
+    room.players = room.gamePhase.elaborateResults()
+    this.server.to(room.id).emit('game', room)
+  }
 }
 
 export interface JoinGamePayload{
   roomId: string,
   player: Player
+}
+
+export interface NextGamePhasePayload{
+  roomId: string
+}
+
+export interface VoteDayPayload extends JoinGamePayload{
+  voteFor: string;
+}
+
+export interface NightActionPayload extends JoinGamePayload{
+  targetPlayerId: string;
 }

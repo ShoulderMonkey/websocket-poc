@@ -22,4 +22,8 @@ export class GameSocket extends Socket {
   getRoom() {
     return this.fromEvent('player_joined')
   }
+
+  isMyNightTurn(role: string){
+    return this.fromEvent<boolean>(role)
+  }
 }

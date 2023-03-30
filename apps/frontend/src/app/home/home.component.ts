@@ -41,6 +41,7 @@ export class HomeComponent {
   createGame(){
     this.playerService.createGame(this.playerService.player?.id!).subscribe((roomId: string) => {
       console.log(roomId);
+      this.playerService.player!.isGameMaster = true
       this.gameService.roomId = roomId
       this.route.navigate(['game'])
     })

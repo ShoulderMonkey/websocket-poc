@@ -1,4 +1,4 @@
-<div class="main-container-column">
+<div class="main-container-column" [ngClass]="gameService.game?.gamePhase?.isNight ? 'night': 'day'">
   <div class="main-container-row">
     <router-outlet></router-outlet>
   </div>

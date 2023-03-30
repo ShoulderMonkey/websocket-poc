@@ -3,8 +3,10 @@
 
 <div>
   <h1>{{gameService.roomId}}</h1>
-
+  <button mat-raised-button *ngIf="isGameMaster" (click)="nextPhase()">Next Phase</button>
 </div>
 <websocket-poc-players-list
-  [players]="players"></websocket-poc-players-list>
+  class="player-list"
+  [players]="players"
+  (playerClickedEvent)="playerClicked($event)"></websocket-poc-players-list>
 </div>

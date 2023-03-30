@@ -1,6 +1,12 @@
 .main-container{
+  display:flex;
+  flex-direction: column;
   flex-grow: 1;
   align-self: center;
   min-width: 90%;
   max-width: 400px;
+}
+
+.player-list{
+  flex-grow: 1;
 }
