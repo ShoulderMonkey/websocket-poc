@@ -24,6 +24,7 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // A client has connected
     //notify the user his socketId
     socket.emit('socketId', socket.id)
+
   }
 
   async handleDisconnect(socket: Socket) {
@@ -58,7 +59,8 @@ export class RoomGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     let room = this.roomService.getRoom(payload.roomId)
     const isGameMaster = room.gameMaster.id ===payload.player.id?true: false
-    room.addPlayer(payload.player,isGameMaster)
+    const player = this.roomService.getPlayer(payload.player.id)
+    room.addPlayer(player,isGameMaster)
     this.server.to(payload.roomId).emit('game', room)
   }
 

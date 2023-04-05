@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Voting Player</h1>
+<div mat-dialog-content>
+  Would you like to vote for {{player.name}} ?
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog(false)">Cancel</button>
+  <button mat-button cdkFocusInitial (click)="closeDialog(true)">Ok</button>
+</div>
