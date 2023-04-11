@@ -58,20 +58,33 @@ export class GameComponent implements OnInit {
 
   playerClicked(player: Player){
     //TODO: add modal confirmation
-    this.dialog.open(PlayerSelectionModalComponent, {
-      data: player,
-      enterAnimationDuration: '500ms',
-      exitAnimationDuration: '500ms'
-    }).afterClosed().subscribe(confirmed => {
-        console.log('confirmed: ', confirmed);
-        this.notificationService.openNotification('test', 'test long string')
-      })
-
-    if(this.gameService.game?.gamePhase.isNight && this.isMyNightTurn){
-      this.gameService.executeNightAction(player.id!, this.playerService.player!)
-    }else if(!this.gameService.game?.gamePhase.isNight){
-      this.gameService.voteDay(player.id!, this.playerService.player!)
+    const isNight = this.gameService.game?.gamePhase.isNight
+    if(player.id === this.playerService.player?.id){
+      this.notificationService.openNotification('Questo sei tu, COGLIONE!!', `il tuo ruolo è ${this.playerService.player?.role.name}`)
+      return;
     }
+
+    if(!isNight || (isNight && this.isMyNightTurn)){
+      this.dialog.open(PlayerSelectionModalComponent, {
+        data: player,
+        enterAnimationDuration: '500ms',
+        exitAnimationDuration: '500ms'
+      }).afterClosed().subscribe(confirmed => {
+          console.log('confirmed: ', confirmed);
+
+          if(this.gameService.game?.gamePhase.isNight && this.isMyNightTurn){
+            this.gameService.executeNightAction(player.id!, this.playerService.player!)
+          }else if(!this.gameService.game?.gamePhase.isNight){
+            this.gameService.voteDay(player.id!, this.playerService.player!)
+          }
+      })
+    }else{
+      this.notificationService.openNotification('NON BARARE!!!', 'Non è il tuo turno')
+    }
+
+
+
+
   }
 
   subscribeToYourNightTurn(){

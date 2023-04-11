@@ -91,7 +91,7 @@ export class Player{
   id: string;
   name: string;
   socketId: string;
-  role: Role = null;
+  role: any = null;
   isGameMaster: boolean = false;
   isAlive: boolean;
   killedBy: string;
@@ -112,8 +112,13 @@ export class Player{
   }
 
   kill(killerRole: string){
-    this.isAlive = false;
-    this.killedBy = killerRole;
+
+    if(this.role.name === 'transformer-wolf' && killerRole === 'wolf'){
+      this.role.transform()
+    }else{
+      this.isAlive = false;
+      this.killedBy = killerRole;
+    }
   }
 
 
@@ -235,16 +240,17 @@ export class GamePhase {
     let player = this.players.find(player => player.id === playerId)
     player.votedFor = voteForId
   }
-
-  nextTrunName(){
+  /*
+  * modifies interal turn name and returns boolean as true if is nigth and false if is day
+  */
+  nextTrunName(): boolean{
     let nextRoleTurnIndex = this.roles.findIndex(role => role.name === this.turnName) + 1
     if(nextRoleTurnIndex >= this.roles.length){
-      this.isNight = false;
+      return false;
     }else{
       this.turnName = this.roles[nextRoleTurnIndex].name
+      return true
     }
-
-    return this.isNight
 
   }
 
